@@ -1,1 +1,1 @@
-# Hashtag-recommendation-for-twitter-data-with-ResNet-LSTM-Bert
+# Hashtag-recommendation-for-twitter-data

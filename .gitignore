@@ -1,0 +1,10 @@
+# git files
+**.DS_Store
+**/__pycache__/*
+
+# local files
+**/tweepy_token/*
+!**/tweepy_token/dummy.txt
+**.ipynb
+**/raw/*
+!**/raw/dummy.txt

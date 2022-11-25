@@ -1,3 +1,6 @@
+"""
+This file combines the whole process of training and evaluation
+"""
 
 import numpy as np
 import pandas as pd

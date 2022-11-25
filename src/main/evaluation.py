@@ -1,15 +1,21 @@
 """
-This file contains the model evaluation including NDCG, MAP, and statistical evaluation
+This file contains the model evaluation including NDCG, MAP, f1 score, ROC curve, precision vs. recall curve and statistical evaluation
 """
 
 import json
 import numpy as np
 import pandas as pd
+import seaborn as sn
 import scipy.stats as st
+import matplotlib.pyplot as plt
 import torch
 from torch.utils.data import DataLoader, Dataset
-
 from config.config import CacheFile, EvalConfig
+from sklearn.metrics import *
+from sklearn.preprocessing import MultiLabelBinarizer
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import confusion_matrix
+from itertools import cycle
 
 
 # cache
@@ -223,6 +229,111 @@ class CalculateMetrics:
         map = self._calculate_MAP(self.pred, self.gt)
         metric.append(('MAP', map))
         return metric
+
+
+# calculate metrics (classification report, confusion_matrix)
+    def evaluation_report(ground_truth, pred_result):
+        mb_ground_truth = MultiLabelBinarizer().fit_transform(list((ground_truth.values())))
+        mb_pred_result = MultiLabelBinarizer().fit_transform(list((pred_result.values())))
+        report = classification_report(mb_ground_truth,mb_pred_result)
+        return report
+    
+    def confusion_matrix_sep(confusion_matrix, axes, class_label, class_names, fontsize = 10):
+            df_cm = pd.DataFrame(confusion_matrix, index=class_names, columns=class_names)
+            try:
+                heatmap = sn.heatmap(df_cm, cmap="Blues", annot=True, annot_kws= {"size": 10}, fmt="d", cbar=False, ax=axes)
+            except ValueError:
+                raise ValueError("Confusion matrix values must be integers.")
+            heatmap.yaxis.set_ticklabels(heatmap.yaxis.get_ticklabels(), rotation=0, ha='right', fontsize= 5)
+            heatmap.xaxis.set_ticklabels(heatmap.xaxis.get_ticklabels(), rotation=0, ha='right', fontsize= 5)
+            axes.set_ylabel('True label', fontsize = 10)
+            axes.set_xlabel('Predicted label', fontsize = 10)
+            axes.set_title("Confusion Matrix for the class - " + class_label, fontsize = 10)
+     
+    def plot_confusion_matrix_sep(ground_truth, pred_result):
+        mb_ground_truth = MultiLabelBinarizer().fit_transform(list((ground_truth.values())))
+        mb_pred_result = MultiLabelBinarizer().fit_transform(list((pred_result.values())))
+        cm = multilabel_confusion_matrix(mb_ground_truth,mb_pred_result)
+        labels = ["".join("c" + str(i)) for i in range(0, 50)]
+        fig, ax = plt.subplots(10, 5, figsize=(30, 15))
+        for axes, cfs_matrix, label in zip(ax.flatten(), cm, labels):
+            confusion_matrix_sep(cfs_matrix, axes, label, ["N", "Y"])
+        plt.show()
+        
+        
+# calculate metrics (ROC curve, precision vs. recall curve)
+    # Compute ROC curve and ROC area for each class
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    n_classes = 50
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(mb_y_test[:, i], pred_prob_tfidf[:,i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+        
+    # Compute micro-average ROC curve and ROC area
+    fpr["micro"], tpr["micro"], _ = roc_curve(mb_y_test.ravel(), pred_prob_tfidf.ravel())
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
+        mean_tpr += np.interp(all_fpr, fpr[i], tpr[i])
+    mean_tpr /= n_classes
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
+    roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+
+    plt.figure(figsize = (20,15))
+    plt.plot(
+        fpr["micro"],
+        tpr["micro"],
+        label="micro-average ROC curve (area = {0:0.2f})".format(roc_auc["micro"]),
+        color="darkred",
+        linestyle=":",
+        linewidth=4,
+    )
+    plt.plot(
+        fpr["macro"],
+        tpr["macro"],
+        label="macro-average ROC curve (area = {0:0.2f})".format(roc_auc["macro"]),
+        color="navy",
+        linestyle=":",
+        linewidth=4,
+    )
+    colors = cycle(["aqua", "orange", "lightgreen", "lightpink", "gold","mediumpurple","chocolate"])
+    for i, color in zip(range(n_classes), colors):
+        plt.plot(
+            fpr[i],
+            tpr[i],
+            color=color,
+            linewidth=4,
+            label= "ROC curve of class {0} (area = {1:0.2f})".format(i, roc_auc[i]),
+        )
+    plt.plot([0, 1], [0, 1], "k--", lw=4)
+    plt.xlim([-0.05, 1.05])
+    plt.ylim([-0.05, 1.05])
+    plt.xlabel("False Positive Rate",fontsize=20)
+    plt.ylabel("True Positive Rate",fontsize=20)
+    plt.title("ROC Curve",fontsize=20)
+    plt.show()
+    
+    # Compute PR curve for each class
+    precision = dict()
+    recall = dict()
+    n_classes = 50
+    colors = cycle(["aqua", "orange", "lightgreen", "lightpink", "gold","mediumpurple","chocolate"])
+    _, ax = plt.subplots(figsize=(20,15))
+    for i, color in zip(range(n_classes), colors):
+    precision[i], recall[i], _ = precision_recall_curve(mb_y_test[:, i], pred_prob_tfidf[:, i])
+    plt.plot(recall[i], precision[i], color = color, lw=2, label='class {}'.format(i))
+    plt.xlim([-0.05, 1.05])
+    plt.ylim([-0.05, 1.05])
+    plt.xlabel("Recall",fontsize=20)
+    plt.ylabel("Precision",fontsize=20)
+    plt.title("Precision vs. Recall Curve",fontsize=20)
+    plt.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
+    plt.show()
 
 
 

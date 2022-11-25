@@ -195,6 +195,13 @@ class CacheFile:
         return this_file + config['cache']['hashtags_repository']
 
     @property
+    def model_logistic(self) -> str:
+        """
+        The path to trained logistic model checkpoint
+        """
+        return this_file + config['cache']['model_logistic']
+
+    @property
     def model_bert(self) -> str:
         """
         The path to trained BERT model checkpoint
@@ -424,6 +431,14 @@ class TrainConfig:
         Probability threshold for prediciton
         """
         return float(config['train']['threshold'])
+
+class TFIDFLogisticConfig:
+    @property
+    def tfidf_max_len(self) -> int:
+        """
+        The size of hidden layer
+        """
+        return int(config['tfidf_logistic']['tfidf_max_len'])
 
 
 class BERTConfig:

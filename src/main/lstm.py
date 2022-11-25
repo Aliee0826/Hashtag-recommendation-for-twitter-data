@@ -6,11 +6,11 @@ This file contains the model structure of LSTM
 import torch
 from torch import nn
 from torch.autograd import Variable
-from config.config import TrainConfig, LSTMConfig
-from trainer import TextDataset
-
 from torchtext.data import get_tokenizer
 from torchtext.vocab import build_vocab_from_iterator
+
+from config.config import TrainConfig, LSTMConfig
+from trainer import TextDataset
 
 
 # model config

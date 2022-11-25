@@ -53,7 +53,7 @@ def collate_batch_lstm(batch):
         token = text_pipeline(_text)
         X = ([0]* (MAX_LEN-len(token)))+token if len(token)<MAX_LEN else token[:MAX_LEN]
         text_list.append(X)
-    label_list = torch.tensor(label_list, dtype=torch.float)
+    label_list = torch.tensor(label_list, dtype=torch.int64)
     text_list = torch.tensor(text_list, dtype=torch.int64)
     return label_list.to(device), text_list.to(device)
 
@@ -61,7 +61,7 @@ def collate_batch_lstm(batch):
 # model building
 class TextLSTM(nn.Module):
 
-    def __init__(self, vocab_size=len(vocab), embed_dim=MAX_LEN, num_class=50, hidden_dim=HIDDEN_SIZE):
+    def __init__(self, vocab_size=len(vocab), embed_dim=MAX_LEN, hidden_dim=HIDDEN_SIZE, num_class=50):
         super(TextLSTM, self).__init__()
         self.hidden_dim = hidden_dim
         self.embed_dim = embed_dim

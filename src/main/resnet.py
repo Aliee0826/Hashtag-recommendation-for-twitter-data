@@ -24,9 +24,7 @@ EMBED_SIZE = resnet_config.embed_size()
 
 # training config
 train_config = TrainConfig()
-EPOCH = train_config.num_epoch
 MAX_LEN = train_config.max_len
-BATCH = train_config.batch_size
 
 # device
 DEVICE = train_config.device
@@ -167,9 +165,3 @@ class TextResNet(nn.Module):
 
         return self.sigmoid(outputs)
 
-if __name__ == "__main__":
-    a = NUM_RESIDUAL
-    print(a)
-    print(NUM_CHANNEL)
-    print(EMBED_SIZE)
-    print(MAX_LEN)

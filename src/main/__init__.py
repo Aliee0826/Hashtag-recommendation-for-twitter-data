@@ -1,3 +1,3 @@
-from config.config import (
-    CacheFile
+from config import (
+    CacheFile, TrainConfig, LSTMConfig, BERTConfig, RESNETConfig
 )

@@ -8,3 +8,4 @@
 **.ipynb
 **/raw/*
 !**/raw/dummy.txt
+**/glove.6B.100.d/*

@@ -216,27 +216,6 @@ class CacheFile:
         return this_file + config['cache']['model_resnet']
 
     @property
-    def pred_bert(self) -> str:
-        """
-        The path to trained bert predicted result
-        """
-        return this_file + config['cache']['pred_bert']
-
-    @property
-    def pred_lstm(self) -> str:
-        """
-        The path to trained lstm predicted result
-        """
-        return this_file + config['cache']['pred_lstm']
-
-    @property
-    def pred_resnet(self) -> str:
-        """
-        The path to trained resnet predicted result
-        """
-        return this_file + config['cache']['pred_resnet']
-    
-    @property
     def training_metrics_bert(self) -> str:
         """
         The path to validaiton metrics during training
@@ -257,7 +236,153 @@ class CacheFile:
         """
         return this_file + config['cache']['training_metrics_resnet']
 
+    @property
+    def pred_proba_bert(self) -> str:
+        """
+        The path to trained bert predicted probability
+        """
+        return this_file + config['cache']['pred_proba_bert']
 
+    @property
+    def pred_proba_lstm(self) -> str:
+        """
+        The path to trained lstm predicted probability
+        """
+        return this_file + config['cache']['pred_proba_lstm']
+
+    @property
+    def pred_proba_resnet(self) -> str:
+        """
+        The path to trained resnet predicted probability
+        """
+        return this_file + config['cache']['pred_proba_resnet']
+    
+    @property
+    def pred_top_bert(self) -> str:
+        """
+        The path to trained bert predicted top k
+        """
+        return this_file + config['cache']['pred_top_bert']
+
+    @property
+    def pred_top_lstm(self) -> str:
+        """
+        The path to trained lstm predicted top k
+        """
+        return this_file + config['cache']['pred_top_lstm']
+
+    @property
+    def pred_top_resnet(self) -> str:
+        """
+        The path to trained resnet predicted top k
+        """
+        return this_file + config['cache']['pred_top_resnet']
+
+    @property
+    def metrics_bert(self) -> str:
+        """
+        The path to top 3/5/10 metrics of epoch 10/20/30
+        """
+        return this_file + config['cache']['metrics_bert']
+
+    @property
+    def metrics_lstm(self) -> str:
+        """
+        The path top 3/5/10 metrics of epoch 10/20/30
+        """
+        return this_file + config['cache']['metrics_lstm']
+
+    @property
+    def metrics_resnet(self) -> str:
+        """
+        The path to top 3/5/10 metrics of epoch 10/20/30
+        """
+        return this_file + config['cache']['metrics_resnet']
+
+    @property
+    def stats_pred_bert(self) -> str:
+        """
+        The path to statistical evaluation predicted results of bert 
+        """
+        return this_file + config['cache']['stats_pred_bert']
+
+    @property
+    def stats_pred_lstm(self) -> str:
+        """
+        The path to statistical evaluation predicted results of lstm 
+        """
+        return this_file + config['cache']['stats_pred_lstm']
+
+    @property
+    def stats_pred_resnet(self) -> str:
+        """
+        The path to statistical evaluation predicted results of resnet
+        """
+        return this_file + config['cache']['stats_pred_resnet']
+
+    @property
+    def stats_metrics_bert(self) -> str:
+        """
+        The path to statistical evaluation metrics of bert
+        """
+        return this_file + config['cache']['stats_metrics_bert']
+
+    @property
+    def stats_metrics_lstm(self) -> str:
+        """
+        The path to statistical evaluation metrics of lstm
+        """
+        return this_file + config['cache']['stats_metrics_lstm']
+
+    @property
+    def stats_metrics_resnet(self) -> str:
+        """
+        The path to statistical evaluation metrics of resnet
+        """
+        return this_file + config['cache']['stats_metrics_resnet']
+
+
+    @property
+    def stats_ci_bert(self) -> str:
+        """
+        The path to confidence interval of metrics of bert
+        """
+        return this_file + config['cache']['stats_ci_bert']
+
+    @property
+    def stats_ci_lstm(self) -> str:
+        """
+        The path to confidence interval of metrics of lstm
+        """
+        return this_file + config['cache']['stats_ci_lstm']
+
+    @property
+    def stats_ci_resnet(self) -> str:
+        """
+        The path to confidence interval of metrics of resnet
+        """
+        return this_file + config['cache']['stats_ci_resnet']
+
+    @property
+    def gt_val_50(self) -> str:
+        """
+        The path to ground truth file of validation data
+        """
+        return this_file + config['cache']['gt_val_50']
+
+    @property
+    def gt_test_50(self) -> str:
+        """
+        The path to ground truth file of test data
+        """
+        return this_file + config['cache']['gt_test_50']
+
+    @property
+    def gt_stats(self) -> str:
+        """
+        The path to ground truth file for statistical evaluation
+        """
+        return this_file + config['cache']['gt_stats']
 
 
 class TrainConfig:
@@ -338,6 +463,29 @@ class RESNETConfig:
         embedding size
         """
         return int(config['RESNET']['embed_size'])
+
+
+
+class EvalConfig:
+
+    def n_sample(self):
+        """
+        Number of samples we would like to test on
+        """
+        return int(config['evaluate']['n_sample'])
+
+    def top_n(self):
+        """
+        Number of top hashtags the model will return
+        """
+        return config['evaluate']['top_n']
+
+    def epoch_list(self):
+        """
+        Models at which epochs we would like to validate
+        """
+        return config['evaluate']['epoch_list']
+
 
 
 

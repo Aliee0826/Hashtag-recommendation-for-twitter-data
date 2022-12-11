@@ -15,6 +15,11 @@ Start up a fresh virtual environment in the same version as models you want to t
 
 Then run:
 `pip install -r requirements.txt`
+To set up Spark correctly, you may need to set environment variables:
+`PYTHONPATH="PATH_TO_SPARK_PYTHON"`
+`SPARK_HOME="PATH_TO_SPARK"`
+`PYSPARK_PYTHON="PATH_TO_ENV_PYTHON"`
+`PYSPARK_DRIVER_PYTHON=""PATH_TO_ENV_PYTHON"`
 
 ## Updating Data
 Data: run `data_utils.py`
@@ -24,7 +29,7 @@ Data: run `data_utils.py`
    * Simply run `data_utils.py` to get cleaned data with 200 hashtags, cleaned data with 50 hashtags, and cleaned data with 50 hashtags for non-DL models
 
 ## Updating Models
-Models must be added in `src/main` folder, for now we have `lstm.py`, `resnet.py`, `bert.py`.
+Models must be added in `src/main` folder, for now we have `lstm.py`, `resnet.py`, `bert.py`,  `fasttext.py`,  `tfidf_logistic.py`.
 
 ## Model Training/Evaluation/Prediction
 Simply run `main.py`

@@ -13,13 +13,13 @@ Start up a fresh virtual environment in the same version as models you want to t
 `conda create -n twitter_hashtag38 python=3.8`
 `conda activate twitter_hashtag38`
 
-Then run:
-`pip install -r requirements.txt`
-To set up Spark correctly, you may need to set environment variables:
-`PYTHONPATH="PATH_TO_SPARK_PYTHON"`
-`SPARK_HOME="PATH_TO_SPARK"`
-`PYSPARK_PYTHON="PATH_TO_ENV_PYTHON"`
-`PYSPARK_DRIVER_PYTHON=""PATH_TO_ENV_PYTHON"`
+Then run:</br>
+`pip install -r requirements.txt` </br>
+To set up Spark correctly, you may need to set environment variables:</br>
+`PYTHONPATH="PATH_TO_SPARK_PYTHON"`</br>
+`SPARK_HOME="PATH_TO_SPARK"`</br>
+`PYSPARK_PYTHON="PATH_TO_ENV_PYTHON"`</br>
+`PYSPARK_DRIVER_PYTHON=""PATH_TO_ENV_PYTHON"`</br>
 
 ## Updating Data
 Data: run `data_utils.py`
